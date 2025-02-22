@@ -5,4 +5,6 @@ tiktoken
 libcst
 llama-index
 jsonlines
+tomli
+python-dotenv
 swebench @ git+https://github.com/princeton-nlp/SWE-bench

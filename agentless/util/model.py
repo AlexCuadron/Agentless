@@ -12,21 +12,21 @@ from agentless.util.api_requests import (
 )
 
 
+from ..config.model_config import ModelConfig
+
 class DecoderBase(ABC):
     def __init__(
         self,
-        name: str,
+        config: ModelConfig,
         logger,
-        batch_size: int = 1,
-        temperature: float = 0.8,
-        max_new_tokens: int = 1024,
     ) -> None:
-        logger.info("Initializing a decoder model: {} ...".format(name))
-        self.name = name
+        logger.info("Initializing a decoder model: {} ...".format(config.name))
+        self.name = config.name
         self.logger = logger
-        self.batch_size = batch_size
-        self.temperature = temperature
-        self.max_new_tokens = max_new_tokens
+        self.batch_size = config.batch_size
+        self.temperature = config.temperature
+        self.max_new_tokens = config.max_new_tokens
+        self.config = config
 
     @abstractmethod
     def codegen(
