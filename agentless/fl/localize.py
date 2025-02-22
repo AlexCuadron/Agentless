@@ -431,13 +431,15 @@ def localize_irrelevant(args):
 
 def localize(args):
     swe_bench_data = load_dataset(args.dataset, split="test")
+    # Convert dataset to list for thread-safe access
+    swe_bench_data_list = list(swe_bench_data)
     start_file_locs = load_jsonl(args.start_file) if args.start_file else None
     existing_instance_ids = (
         load_existing_instance_ids(args.output_file) if args.skip_existing else set()
     )
 
     if args.num_threads == 1:
-        for bug in tqdm(swe_bench_data, colour="MAGENTA"):
+        for bug in tqdm(swe_bench_data_list, colour="MAGENTA"):
             localize_instance(
                 bug, args, swe_bench_data, start_file_locs, existing_instance_ids
             )
@@ -456,11 +458,11 @@ def localize(args):
                     existing_instance_ids,
                     write_lock,
                 )
-                for bug in swe_bench_data
+                for bug in swe_bench_data_list
             ]
             for future in tqdm(
                 concurrent.futures.as_completed(futures),
-                total=len(swe_bench_data),
+                total=len(swe_bench_data_list),
                 colour="MAGENTA",
             ):
                 future.result()
