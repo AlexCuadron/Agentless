@@ -7,6 +7,7 @@
 
 <p align="center">
     <big><a href="#-news">😽News</a></big> |
+    <big><a href="#-llm-integration">🤖LLM Integration</a></big> |
     <big><a href="#-setup">🐈Setup</a></big> |
     <big><a href="#-comparison">🧶Comparison</a></big> | 
     <big><a href="#-artifacts">🐈‍⬛Artifacts</a></big> |
@@ -26,6 +27,18 @@
 - 🙀 **Localization**: Agentless employs a hierarchical process to first localize the fault to specific files, then to relevant classes or functions, and finally to fine-grained edit locations
 - 😼 **Repair**: Agentless takes the edit locations and samples multiple candidate patches per bug in a simple diff format
 - 😸 **Patch Validation**: Agentless selects the regression tests to run and generates additional reproduction test to reproduce the original error. Using the test results, Agentless re-ranks all remaining patches to selects one to submit
+
+## 🤖 LLM Integration
+
+Agentless uses LiteLLM to provide a unified interface to multiple LLM providers. This integration supports:
+
+- Multiple providers (OpenAI, Anthropic, DeepSeek, etc.)
+- Async and streaming operations
+- Model-specific features (function calling, reasoning effort, etc.)
+- Comprehensive error handling and retries
+- TOML-based configuration
+
+For detailed information about the LiteLLM integration, see [LiteLLM Integration Documentation](docs/litellm_integration.md).
 
 ## 🐈 Setup
 
