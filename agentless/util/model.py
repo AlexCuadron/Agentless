@@ -64,8 +64,15 @@ class DecoderBase(ABC):
 
 
 class OpenAIChatDecoder(DecoderBase):
-    def __init__(self, name: str, logger, **kwargs) -> None:
-        super().__init__(name, logger, **kwargs)
+    def __init__(self, name: str, logger, batch_size: int = 1, max_new_tokens: int = 1024, temperature: float = 0.0) -> None:
+        config = ModelConfig(
+            name=name,
+            provider="openai",
+            batch_size=batch_size,
+            max_new_tokens=max_new_tokens,
+            temperature=temperature
+        )
+        super().__init__(config, logger)
 
     def _create_trajectory(self, responses: List[str], completion_tokens: int, prompt_tokens: int) -> List[dict]:
         """Helper method to create trajectory objects from responses and token counts."""
@@ -207,9 +214,6 @@ class OpenAIChatDecoder(DecoderBase):
 
 
 class AnthropicChatDecoder(DecoderBase):
-    def __init__(self, name: str, logger, **kwargs) -> None:
-        super().__init__(name, logger, **kwargs)
-
     _STR_REPLACE_EDITOR_DESCRIPTION = """Custom editing tool for editing files
 * State is persistent across command calls and discussions with the user
 
@@ -218,8 +222,6 @@ Notes for using the `str_replace` command:
 * If the `old_str` parameter is not unique in the file, the replacement will not be performed. Make sure to include enough context in `old_str` to make it unique
 * The `new_str` parameter should contain the edited lines that should replace the `old_str`
 """
-
-    _USER_REPLY_EDIT_MESSAGE = """File is successfully edited"""
 
     tools = [
         {
@@ -248,6 +250,19 @@ Notes for using the `str_replace` command:
             },
         }
     ]
+
+    def __init__(self, name: str, logger, batch_size: int = 1, max_new_tokens: int = 1024, temperature: float = 0.0) -> None:
+        config = ModelConfig(
+            name=name,
+            provider="anthropic",
+            batch_size=batch_size,
+            max_new_tokens=max_new_tokens,
+            temperature=temperature,
+            tools=self.tools
+        )
+        super().__init__(config, logger)
+
+    _USER_REPLY_EDIT_MESSAGE = """File is successfully edited"""
 
     MAX_CODEGEN_ITERATIONS = 10
 
@@ -689,7 +704,7 @@ def make_model(
             logger=logger,
             batch_size=batch_size,
             max_new_tokens=max_tokens,
-            temperature=temperature,
+            temperature=temperature
         )
     elif backend == "anthropic":
         return AnthropicChatDecoder(
@@ -697,7 +712,7 @@ def make_model(
             logger=logger,
             batch_size=batch_size,
             max_new_tokens=max_tokens,
-            temperature=temperature,
+            temperature=temperature
         )
     elif backend == "deepseek":
         return DeepSeekChatDecoder(

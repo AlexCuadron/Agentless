@@ -63,6 +63,16 @@ temperature = 0.0
 max_new_tokens = 2048
 top_p = 0.9  # Adjusted for Hugging Face-based models
 
+[models.qwen]
+name = "qwen"
+provider = "zhipuai"  # litellm uses zhipuai provider for Qwen
+api_key = "env:ZHIPUAI_API_KEY"  # Will be loaded from environment variable
+temperature = 0.0
+max_new_tokens = 2048
+max_input_tokens = 6144  # Qwen context window
+batch_size = 1
+top_p = 1.0
+
 # Logging configuration
 [logging]
 level = "INFO"
