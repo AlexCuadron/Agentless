@@ -1,0 +1,39 @@
+# Default model to use
+default_model = "gpt-4"
+
+# Model configurations
+[models.gpt-4]
+name = "gpt-4"
+provider = "openai"
+api_key = "env:OPENAI_API_KEY"  # Will be loaded from environment variable
+temperature = 0.0
+max_new_tokens = 1024
+batch_size = 1
+num_retries = 3
+retry_min_wait = 4
+retry_max_wait = 10
+retry_multiplier = 2
+
+[models.claude-3]
+name = "claude-3-sonnet-20240229"
+provider = "anthropic"
+api_key = "env:ANTHROPIC_API_KEY"
+temperature = 0.0
+max_new_tokens = 4096
+batch_size = 1
+tools = [
+    { type = "function", function = { name = "str_replace_editor", description = "Custom editing tool for editing files", parameters = { type = "object", properties = { path = { description = "Full path to file", type = "string" }, old_str = { description = "String to replace", type = "string" }, new_str = { description = "New string", type = "string" } }, required = ["path", "old_str"] } } }
+]
+
+[models.deepseek]
+name = "deepseek-chat"
+provider = "deepseek"
+api_key = "env:DEEPSEEK_API_KEY"
+base_url = "https://api.deepseek.com"
+temperature = 0.0
+max_new_tokens = 2048
+
+# Logging configuration
+[logging]
+level = "INFO"
+format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
