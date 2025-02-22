@@ -1,5 +1,4 @@
-anthropic
-openai
+litellm
 pre-commit
 datasets
 tiktoken
